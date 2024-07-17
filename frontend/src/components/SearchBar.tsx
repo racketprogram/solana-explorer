@@ -7,9 +7,11 @@ export const SearchBar: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (search.length === 64) {
+    if (search.length === 88) {
+      console.log('Navigating to transaction:', search);
       navigate(`/tx/${search}`);
     } else {
+      console.log('Navigating to block:', search);
       navigate(`/block/${search}`);
     }
   };
@@ -21,6 +23,7 @@ export const SearchBar: React.FC = () => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search by block number or transaction signature"
+        style={{ width: '100%', maxWidth: '500px' }}
       />
       <button type="submit">Search</button>
     </form>
