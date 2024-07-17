@@ -3,19 +3,31 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 
 interface Transaction {
-  transaction: {
-    signatures: string[]
-  }
+  signature: string;
+  success: boolean;
 }
 
-interface Block {
-  transactions: Transaction[]
-  // Add other properties as needed
+interface BlockDetails {
+  blockhash: string;
+  slot: number;
+  parentSlot: number;
+  timestamp: string | null;
+  transactions: Transaction[];
+  previousBlockhash: string;
+  rewards: Array<{
+    pubkey: string;
+    lamports: number;
+    postBalance: number;
+    rewardType: string;
+  }>;
+  blockHeight: number | null;
+  blockLeader: string | null;
+  epoch: number;
 }
 
 export const BlockDetails: React.FC = () => {
   const { blockNumber } = useParams<{ blockNumber: string }>();
-  const [block, setBlock] = useState<Block | null>(null);
+  const [block, setBlock] = useState<BlockDetails | null>(null);
 
   useEffect(() => {
     const fetchBlock = async () => {
@@ -29,12 +41,32 @@ export const BlockDetails: React.FC = () => {
 
   return (
     <div>
-      <h1>Block {blockNumber}</h1>
+      <h1>Block Details</h1>
+      <p>Blockhash: {block.blockhash}</p>
+      <p>Slot: {block.slot}</p>
+      <p>Parent Slot: {block.parentSlot}</p>
+      <p>Timestamp: {block.timestamp}</p>
+      <p>Previous Blockhash: {block.previousBlockhash}</p>
+      <p>Block Height: {block.blockHeight}</p>
+      <p>Block Leader: {block.blockLeader}</p>
+      <p>Epoch: {block.epoch}</p>
+      
       <h2>Transactions</h2>
       <ul>
-        {block.transactions.map((tx: Transaction) => (
-          <li key={tx.transaction.signatures[0]}>
-            <Link to={`/tx/${tx.transaction.signatures[0]}`}>{tx.transaction.signatures[0]}</Link>
+        {block.transactions.map((tx, index) => (
+          <li key={index}>
+            <Link to={`/tx/${tx.signature}`}>
+              {tx.signature} - {tx.success ? 'Success' : 'Failed'}
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      <h2>Rewards</h2>
+      <ul>
+        {block.rewards.map((reward, index) => (
+          <li key={index}>
+            Pubkey: {reward.pubkey}, Amount: {reward.lamports / 1e9} SOL, Type: {reward.rewardType}
           </li>
         ))}
       </ul>

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Connection, ParsedTransactionWithMeta, PublicKey } from '@solana/web3.js';
+import { Connection } from '@solana/web3.js';
 
 export default function(connection: Connection) {
   const router = Router();
