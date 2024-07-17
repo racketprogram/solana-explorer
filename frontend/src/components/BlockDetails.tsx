@@ -25,13 +25,15 @@ interface BlockDetails {
   epoch: number;
 }
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 export const BlockDetails: React.FC = () => {
   const { blockNumber } = useParams<{ blockNumber: string }>();
   const [block, setBlock] = useState<BlockDetails | null>(null);
 
   useEffect(() => {
     const fetchBlock = async () => {
-      const response = await axios.get(`http://localhost:3001/api/blocks/${blockNumber}`);
+      const response = await axios.get(`${API_BASE_URL}/blocks/${blockNumber}`);
       setBlock(response.data);
     };
     fetchBlock();

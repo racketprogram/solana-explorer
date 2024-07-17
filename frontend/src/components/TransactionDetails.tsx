@@ -22,13 +22,15 @@ interface TransactionDetails {
   accountInputs: AccountInput[];
 }
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 export const TransactionDetails: React.FC = () => {
   const { signature } = useParams<{ signature: string }>();
   const [transaction, setTransaction] = useState<TransactionDetails | null>(null);
 
   useEffect(() => {
     const fetchTransaction = async () => {
-      const response = await axios.get(`http://localhost:3001/api/transactions/${signature}`);
+      const response = await axios.get(`${API_BASE_URL}/transactions/${signature}`);
       setTransaction(response.data);
     };
     fetchTransaction();
